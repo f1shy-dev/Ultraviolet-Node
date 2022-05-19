@@ -1,6 +1,5 @@
 import Server from "bare-server-node";
 import https from "https";
-import http from "http";
 import nodeStatic from "node-static";
 import fs from "fs";
 
@@ -11,27 +10,25 @@ const httpsServer = https.createServer({
   key: fs.readFileSync("ssl/key.pem"),
   cert: fs.readFileSync("ssl/cert.pem"),
 });
-const httpServer = http.createServer();
 
-// const server = http.createServer();
-[httpServer, httpsServer].forEach(i => i.on("request", (request, response) => {
+httpsServer.on("request", (req, res) => {
+  const proxied = bare.route_request(req, res);
+  !proxied && serve.serve(req, res);
+
+  const hd = req.headers;
   console.log(
-    `[-] ${request.headers["x-bare-host"] || ""}${request.headers["x-bare-path"] || request.url}`
+    `[${proxied ? "proxy" : "static"}] ${hd["x-bare-host"] || ""}${
+      hd["x-bare-path"] || req.url
+    }`
   );
-  console.log(request.headers);
-  if (bare.route_request(request, response)) return true;
-  serve.serve(request, response);
-}));
-
-[httpServer, httpsServer].forEach(i => i.on("upgrade", (req, socket, head) => {
-  if (bare.route_upgrade(req, socket, head)) return;
-  socket.end();
-}));
-
-httpsServer.listen(443, () => {
-  console.log(`[-] https server started on port 443`)
+  proxied && console.log(hd);
 });
 
-httpServer.listen(8080, () => {
-  console.log(`[-] http server started on port 8080`)
+httpsServer.on("upgrade", (req, socket, head) => {
+  if (bare.route_upgrade(req, socket, head)) return;
+  socket.end();
+});
+
+httpsServer.listen(process.env.PORT || 443, () => {
+  console.log(`[-] https server started on port ${process.env.PORT || 443}`);
 });

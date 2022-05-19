@@ -29,6 +29,8 @@ class UVServiceWorker extends EventEmitter {
                 'accept-encoding', 
                 'connection',
                 'content-length',
+		'content-type',
+		'user-agent'
             ],
         };
         this.method = {
@@ -89,6 +91,9 @@ class UVServiceWorker extends EventEmitter {
 
                 requestCtx.headers.referer = referer.href;
             };
+
+            // GEFORCE NOW SPECIFIC
+            requestCtx.headers["nv-device-os"] = "WINDOWS";
 
             const cookies = await ultraviolet.cookie.getCookies(db) || [];
             const cookieStr = ultraviolet.cookie.serialize(cookies, ultraviolet.meta, false);
