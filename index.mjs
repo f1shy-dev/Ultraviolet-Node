@@ -22,8 +22,6 @@ httpsServer.on("request", (req, res) => {
     }`
   );
   proxied && console.log(hd);
-  proxied && console.log(res.headers);
-  proxied && console.log(res.body);
 });
 
 httpsServer.on("upgrade", (req, socket, head) => {
