@@ -33,7 +33,7 @@ class UVServiceWorker extends EventEmitter {
         "connection",
         "content-length",
         "content-type",
-        // "user-agent",
+        "user-agent",
       ],
     };
     this.method = {

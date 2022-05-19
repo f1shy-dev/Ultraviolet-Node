@@ -10,8 +10,6 @@ self.__uv$config = {
   custom: {
     headerOverride: {
       "nv-device-os": "WINDOWS",
-      "user-agent":
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Mobile/15E148 Safari/604.1",
     },
   },
 };
