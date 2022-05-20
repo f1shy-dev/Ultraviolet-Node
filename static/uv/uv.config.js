@@ -10,6 +10,7 @@ self.__uv$config = {
   custom: {
     headerOverride: {
       "nv-device-os": "WINDOWS",
+      "nv-device-type": "DESKTOP",
     },
   },
 };
